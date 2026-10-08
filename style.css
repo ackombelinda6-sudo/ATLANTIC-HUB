@@ -401,7 +401,8 @@ body {
 .delete-btn:active {
   background: #ffd1cc;
 }
-  /* ===== MARKETPLACE UPGRADES ===== */
+}
+/* ===== MARKETPLACE UPGRADES ===== */
 
 /* Nicer page header */
 .page-header {
@@ -619,5 +620,4 @@ body {
   font-size: 42px;
   margin-bottom: 12px;
   opacity: 0.5;
-}
 }
