@@ -256,4 +256,149 @@ body {
   color: var(--muted);
   font-size: 12px;
   line-height: 1.7;
+  /* ===== FLOATING ADD BUTTON ===== */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  font-size: 28px;
+  box-shadow: 0 6px 20px rgba(0,51,160,0.4);
+  cursor: pointer;
+  z-index: 200;
+  transition: transform 0.2s;
+}
+
+.fab:active {
+  transform: scale(0.92);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 30px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal h3 {
+  font-size: 18px;
+  color: var(--blue-dark);
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.modal .form-group {
+  margin-bottom: 14px;
+}
+
+.modal .form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue-dark);
+  margin-bottom: 6px;
+}
+
+.modal .form-group input,
+.modal .form-group textarea,
+.modal .form-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e4e7ec;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+  background: white;
+}
+
+.modal .form-group input:focus,
+.modal .form-group textarea:focus,
+.modal .form-group select:focus {
+  border-color: var(--blue);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: white;
+}
+
+.btn-primary:active {
+  background: var(--blue-dark);
+}
+
+.btn-secondary {
+  background: #eef1f7;
+  color: var(--blue-dark);
+}
+
+/* ===== DELETE BUTTON ON ITEM ===== */
+.list-item {
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #ffe8e6;
+  color: #d92d20;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.delete-btn:active {
+  background: #ffd1cc;
+}
 }
