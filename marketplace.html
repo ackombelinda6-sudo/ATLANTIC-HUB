@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy & Sell | Great Atlantic Hall</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html">←</a>
+    <h1>🛒 Buy & Sell</h1>
+  </header>
+
+  <main class="page-body">
+    <input type="text" class="search-bar" id="searchBar" placeholder="Search textbooks, electronics, food...">
+    <div id="listings"></div>
+  </main>
+
+  <button class="fab" onclick="openModal()">＋</button>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h3>Post an Item for Sale</h3>
+
+      <form onsubmit="addItem(event)">
+        <div class="form-group">
+          <label>Item name</label>
+          <input type="text" id="itemName" required placeholder="e.g., Calculus Textbook">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="itemDesc" rows="2" required placeholder="Condition, details..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Price (GH₵)</label>
+          <input type="number" id="itemPrice" required min="0" placeholder="e.g., 80">
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select id="itemCategory">
+            <option>Books</option>
+            <option>Electronics</option>
+            <option>Food</option>
+            <option>Furniture</option>
+            <option>Clothing</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Your contact (phone or room #)</label>
+          <input type="text" id="itemContact" required placeholder="e.g., Room B12 / 0551234567">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Post Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    var DEFAULT_ITEMS = [
+      { id: 1, name: "Calculus Textbook (Stewart 8th Ed.)", desc: "Gently used, no missing pages. Perfect for MTH101.", price: 80, category: "Books", contact: "Room A12" },
+      { id: 2, name: "Electric Kettle (1.7L)", desc: "Brand new, still in box.", price: 120, category: "Electronics", contact: "0551234567" },
+      { id: 3, name: "Indomie (Carton)", desc: "Chicken flavor. Ideal for late-night study sessions.", price: 65, category: "Food", contact: "Room C4" },
+      { id: 4, name: "Desk Lamp (LED)", desc: "Rechargeable, 3 brightness levels.", price: 45, category: "Electronics", contact: "Room B7" }
+    ];
+
+    var items = DEFAULT_ITEMS;
+    try {
+      var saved = localStorage.getItem("ga_marketplace");
+      if (saved) { items = JSON.parse(saved); }
+    } catch (e) { items = DEFAULT_ITEMS; }
+
+    function save() {
+      try { localStorage.setItem("ga_marketplace", JSON.stringify(items)); } catch (e) {}
+    }
+
+    function escapeHtml(text) {
+      var div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function render(filter) {
+      filter = filter || "";
+      var q = filter.toLowerCase();
+      var container = document.getElementById("listings");
+
+      var visible = items.filter(function(i) {
+        return i.name.toLowerCase().indexOf(q) !== -1 ||
+               i.desc.toLowerCase().indexOf(q) !== -1 ||
+               i.category.toLowerCase().indexOf(q) !== -1;
+      });
+
+      if (visible.length === 0) {
+        container.innerHTML = '<div class="empty-state">No items found. Tap ＋ to post one!</div>';
+        return;
+      }
+
+      var html = "";
+      for (var i = 0; i < visible.length; i++) {
+        var item = visible[i];
+        html += '<div class="list-item">';
+        html += '<button class="delete-btn" onclick="deleteItem(' + item.id + ')">✕</button>';
+        html += '<h4>' + escapeHtml(item.name) + '</h4>';
+        html += '<p>' + escapeHtml(item.desc) + '</p>';
+        html += '<p style="font-size:12px;color:#667085;">📍 ' + escapeHtml(item.contact) + '</p>';
+        html += '<div class="meta">';
+        html += '<span class="price-tag">GH₵ ' + item.price + '</span>';
+        html += '<span class="tag">' + escapeHtml(item.category) + '</span>';
+        html += '</div></div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function addItem(e) {
+      e.preventDefault();
+      var newItem = {
+        id: Date.now(),
+        name: document.getElementById("itemName").value.trim(),
+        desc: document.getElementById("itemDesc").value.trim(),
+        price: parseInt(document.getElementById("itemPrice").value, 10),
+        category: document.getElementById("itemCategory").value,
+        contact: document.getElementById("itemContact").value.trim()
+      };
+      items.unshift(newItem);
+      save();
+      render(document.getElementById("searchBar").value);
+      closeModal();
+      e.target.reset();
+    }
+
+    function deleteItem(id) {
+      if (!confirm("Delete this listing?")) return;
+      var next = [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].id !== id) next.push(items[i]);
+      }
+      items = next;
+      save();
+      render(document.getElementById("searchBar").value);
+    }
+
+    function openModal() {
+      document.getElementById("modal").classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.remove("active");
+    }
+
+    document.getElementById("modal").addEventListener("click", function(e) {
+      if (e.target.id === "modal") closeModal();
+    });
+
+    document.getElementById("searchBar").addEventListener("input", function(e) {
+      render(e.target.value);
+    });
+
+    render("");
+  </script>
+
+</body>
+</html>
