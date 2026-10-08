@@ -115,7 +115,7 @@
         html += '<p style="font-size:12px;color:#667085;">📍 ' + escapeHtml(item.contact) + '</p>';
         html += '<div class="meta">';
         html += '<span class="price-tag">GH₵ ' + item.price + '</span>';
-        html += '<span class="tag">' + escapeHtml(item.category) + '</span>';
+        html += '<span class="tag" data-cat="' + escapeHtml(item.category) + '">' + escapeHtml(item.category) + '</span>';
         html += '</div></div>';
       }
       container.innerHTML = html;
